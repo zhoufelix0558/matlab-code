@@ -10,3 +10,24 @@ hold on
 plot(t,y)
 legend('Input Data','Filtered Data')
 grid on
+
+
+%%---------filter设计代码------------------
+% Equiripple Lowpass filter designed using the FIRPM function.
+
+% All frequency values are in Hz.
+Fs = 54;  % Sampling Frequency
+
+N     = 6;  % Order
+Fpass = 5;   % Passband Frequency
+Fstop = 6;   % Stopband Frequency
+Wpass = 1;   % Passband Weight
+Wstop = 20;  % Stopband Weight
+dens  = 20;  % Density Factor
+
+% Calculate the coefficients using the FIRPM function.
+b  = firpm(N, [0 Fpass Fstop Fs/2]/(Fs/2), [1 1 0 0], [Wpass Wstop], ...
+           {dens});
+Hd = dfilt.dffir(b);
+
+Hd.Numerator                    %滤波器的系数
